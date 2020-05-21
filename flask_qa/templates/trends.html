@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../static/datatable.css">
+<link rel="stylesheet" type="text/css" href="../static/patientinfo.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+<script>
+  $(document).ready( function () {
+    $('#med_table').DataTable({
+    });
+  });
+</script>
+
+<div class="page-header">
+  <h1>Clinic Wide Patient Trends</h1>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawChart2);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ["Age Range", "Number of Patients", { role: "style" } ],
+          ["0-5", {{zerotofive}}, "#df6919"],
+          ["5-10", {{fivetoten}}, "#df6919"],
+          ["10-15", {{tentofifteen}}, "#df6919"],
+          ["15-20", {{fifteentotwenty}}, "#df6919"],
+          ["20-25", {{twentytotwentyfive}}, "#df6919"],
+          ["25-30", {{twentyfivetothirty}}, "#df6919"],
+          ["30-35", {{thirtytothirtyfive}}, "#df6919"],
+          ["35-40", {{thirtyfivetofourty}}, "#df6919"],
+          ["40-45", {{fourtytofourtyfive}}, "#df6919"],
+          ["45-50", {{fourtyfivetofifty}}, "#df6919"],
+          ["50-55", {{fiftytofiftyfive}}, "#df6919"],
+          ["55-60", {{fiftyfivetosixty}}, "#df6919"],
+          ["60-65", {{sixtytosixtyfive}}, "#df6919"],
+          ["65-70", {{sixtyfivetoseventy}}, "#df6919"],
+          ["70-75", {{seventytoseventyfive}}, "#df6919"],
+          ["75-80", {{seventyfivetoeighty}}, "#df6919"],
+          ["80-85", {{eightytoeightyfive}}, "#df6919"],
+          ["85-90", {{eightyfivetoninety}}, "#df6919"],
+          ["90-95", {{ninetytoninetyfive}}, "#df6919"],
+          ["95-100", {{ninetyfivetohundred}}, "#df6919"],
+
+        ]);
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+                         { calc: "stringify",
+                           sourceColumn: 1,
+                           type: "string",
+                           role: "annotation" },
+                         2]);
+
+        var options = {
+          titleTextStyle: {
+            color: '#fcfafa',    // any HTML string color ('red', '#cc00cc')
+            fontSize: 18, // 12, 18 whatever you want (don't specify px)
+          },
+          title: "Patient Age Distribution",
+          width: 800,
+          height: 400,
+          animation: {"startup": true},
+          animation: {"duration": 2},
+          bar: {"groupWidth": "95%"},
+          backgroundColor: '#2c3e51',
+          legend: { position: "none"},
+          hAxis: {
+            textStyle:{color: '#fcfafa',
+            fontSize : 10},
+          },
+          vAxis: {
+            textStyle:{color: '#fcfafa',
+            fontSize : 7},
+          }
+
+
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(view, options);
+      }
+
+      function drawChart2() {
+        var data = google.visualization.arrayToDataTable([
+          ['Day of Week', 'Number of Patient Visits'],
+          ['Sunday', {{sun}}],
+          ['Monday',      {{mon}}],
+          ['Tuesday',  {{tue}}],
+          ['Wednesday',  {{wed}}],
+          ['Thursday', {{thur}}],
+          ['Friday',    {{fri}}],
+          ['Saturday',    {{sat}}]
+        ]);
+
+        var options = {
+          colors: ['#f7d3ba', '#f2b58c', '#ed985f', '#e87b31', '#ce6117', '#a04c12', '#73360d'],
+          titleTextStyle: {
+            color: '#fcfafa',    // any HTML string color ('red', '#cc00cc')
+            fontSize: 18, // 12, 18 whatever you want (don't specify px)
+          },
+          title: "Day of Patient Visits",
+          animation: {"startup": true},
+          animation: {"duration": 2},
+          width: 600,
+          height: 400,
+          backgroundColor: '#2c3e51',
+          legend: {
+            textStyle:{color: '#fcfafa'}
+          }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+
+
+
+    </script>
+  </head>
+  <body>
+    <table class = "rows">
+      <tr>
+        <tr><div id="columnchart_values" style="margin-top: 10px; border: 1px solid #ccc""></div><tr>
+        <tr><div id="piechart" style="margin-top: 10px; border: 1px solid #ccc""></div><tr>
+        <tr><div class="col-lg-12">
+              <br>
+              <table id="med_table" class="display">
+                <h2>Medication Prescribed This Calendar Year</h2>
+                <thead>
+                  <tr>
+                    <th>Medication</th>
+                    <th>Amount (mg)</th>
+                    <th></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in medications %}
+                      <tr>
+                        <td>{{i.med_name}}</td>
+                        <td>{{i.totals}}</td>
+                      </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div><tr>
+      </tr>
+    </table>
+  </body>
+
+
+
+
+
+{% endblock %}

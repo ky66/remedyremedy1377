@@ -1,0 +1,77 @@
+--Login a Doctor
+doctorid	username	password
+1	kate	pbkdf2:sha256:150000$mQklhWU7$319a2be22b5e87faaf8efee10ae9616859aa46ef343674e1abfec8b63c20ad4e
+
+
+--Get all Doctors Working
+username
+kate
+kamyar
+rob
+kate1
+kate5
+Holly Williamson
+Timothy Clark
+Julie Thompson
+Donna Mcguire
+Alicia Hernandez
+Karen Bowers DDS
+William Nelson
+Bethany Mathis
+Kara Combs
+Paula Buchanan
+
+
+--Test no doctor
+No records found
+
+
+--Test working username password pair
+doctorid	username	password
+1	kate	pbkdf2:sha256:150000$mQklhWU7$319a2be22b5e87faaf8efee10ae9616859aa46ef343674e1abfec8b63c20ad4e
+
+
+--Test wrong username password pair
+No records found
+
+
+--Get Patient Data
+patientid	name_first	name_last	dob	email	address	phone
+1	Daniel	Jordan	10/31/1917 0:00	justin23@fisher-larson.info	"09771 Dennis Summit
+Valentineland, DC 98245"	2.56071E+12
+
+
+--Get All Patient Medication
+medication	dose	frequency	startdate	enddate
+Amoxicillin	2 pills	every 8 hours	1/21/2010 0:00	10/6/2018 0:00
+Lisinopril	1 pill	hourly	5/17/2018 0:00	
+Azithromycin	2 pills	weekly	2/19/2000 0:00	
+
+
+--Get Current Patient Medication
+medication	dose	frequency	startdate	enddate
+Lisinopril	1 pill	hourly	5/17/2018 0:00	
+Azithromycin	2 pills	weekly	2/19/2000 0:00	
+
+
+--Get Patient History
+patient_history
+Improve light service clear much defense education. Around pay while source summer study fund. Participant tax whole management career compare.
+"Blue seven bed follow discuss control. Approach break year you once.
+Product cold down truth employee once. Attorney inside there police stock. That main PM anything public hot."
+"Area herself tell bit may enjoy. Most now how around current life.
+Bank movie expect may long community. Future eat enough compare street meet. Night standard under economic."
+
+
+--Find all current medications
+medication
+Metformin
+Amoxicillin
+Lisinopril
+hydrocodone/acetaminophen
+Hydrochlorothiazide
+Lipitor
+Levothyroxine
+Amlodipine
+Simvastatin 
+Azithromycin

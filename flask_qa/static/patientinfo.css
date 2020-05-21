@@ -1,0 +1,62 @@
+.collapsible {
+  background-color: #64798c;
+  color: #e6f2ff;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+.active, .collapsible:hover {
+  background-color: #6e859a;
+}
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  float: right;
+}
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+  td {
+    color:  #000000;
+  }
+  table {
+    font-size: 15px;
+  }
+.edit {
+  color:  #000000;
+  font-size:13px;
+}
+input {
+  width:14%;
+}
+button {
+  background-color:#df6919;
+  border:transparent;
+  font-size:15px;
+  padding:5px;
+  padding-left:10px;
+  padding-right:10px;
+}
+.text {
+  width:100%;
+  margin-bottom:3px;
+  padding:3px;
+}
+.new_visit {
+  margin:2%;
+  padding:2%;
+  background-color:#365068;
+}
+#visit_info {
+  padding:2%;
+  padding-bottom: 0px;
+}
+select{
+  color:#365068;
+}

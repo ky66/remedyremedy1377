@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% block title %}Patient Info{% endblock %}
+
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../static/datatable.css">
+<link rel="stylesheet" type="text/css" href="../static/patientinfo.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+
+<script>
+  $(document).ready( function () {
+    $('#med_table').DataTable({
+      searching:false
+    });
+    $('#visit_table').DataTable({
+      searching:false,
+      scrollX:true,
+      columnDefs: [
+      { "width": "65px", "targets": 0 },
+      { "width": "10px", "targets": 1 },
+      { "width": "10px", "targets": 2 },
+      { "width": "30px", "targets": 3 },
+      { "width": "150px", "targets": 4 },
+      { "width": "150px", "targets": 5 },
+      { "width": "150px", "targets": 6 },
+      { "width": "150px", "targets": 7 },
+      { "width": "150px", "targets": 8 },
+      { "width": "150px", "targets": 9 }
+    ],
+    });
+    $('#curr_med_table').DataTable({
+      paging:false,
+      searching:false
+    });
+  });
+</script>
+
+<div class="page-header">
+      <h1>{{patient.name_first}} {{patient.name_last}}</h1>
+      </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="well bs-component">
+              <h2>Info&ensp;<button id="update_info" onclick="update_info()">Update</button></h2>
+              <div id="info_show">
+                <p>Date of Birth: {{patient.dob}}
+                &emsp;&emsp;Address: {{patient.address}}
+                &emsp;&emsp;Phone: {{patient.phone}}
+                &emsp;&emsp;Email: {{patient.email}}</p>
+                <p>History: {{history.medical_history}}</p>
+                <p>Past Treatment: {{history.treatment}}</p>
+              </div>
+              <div id="info_edit">
+              <form class="form-horizontal" method="POST" action="{{ url_for('main.patientinfo',patient_id=patient.id)}}">
+                <fieldset>
+                  <p>Date of Birth:
+                  <input type="date" name="new_dob" id="new_dob" value={{patient.dob}}>
+                  &emsp;&emsp;Address:
+                  <input type="text" name="new_add" id="new_add" value={{patient.address}}><br>
+                  &emsp;&emsp;Phone:
+                  <input type="text" name="new_phone" id="new_phone" value={{patient.phone}}>
+                  &emsp;&emsp;Email:
+                  <input type="text" name="new_email" id="new_email" value={{patient.email}}></p>
+                  <p>History:
+                  <input type="text" class="text" name="new_hist" id="new_hist" value={{history.medical_history}}>
+                  Past Treatment:
+                  <input type="text" class="text" name="new_treatment" id="new_treatment" value={{history.treatment}}>
+                  <br><br><button type="submit">Save</button></p>
+                </fieldset>
+              </form>
+              </div>
+              <h2>Last Visit&ensp;<a style="color:#ebebeb" href="{{url_for('main.newvisit', patient_id=patient.id)}}"><button id="update_info">Start New Visit</button></a></h2>
+              {% if visits %}
+                <p><b>Date:</b>{{visits[-1].weight}}
+                &emsp;<b>Weight (kg):</b>{{visits[-1].weight}}
+                &emsp;<b>Height (cm):</b> {{visits[-1].height}}
+                &emsp;<b>Doctor Name:</b> {{visits[-1].doctor_name}}
+                <p><b>Symptoms:</b> {{visits[-1].symptoms}}</p>
+                <p><b>Diagnostics:</b> {{visits[-1].diagnostics}}</p>
+                <p><b>Comobordities:</b> {{visits[-1].comorbidities}}</p>
+                <p><b>Clinical Progress:</b> {{visits[-1].clinical_progress}}</p>
+                <p><b>Support Services:</b> {{visits[-1].support_services}}</p>
+                <button type="button" class="collapsible">See All Past Visits</button>
+                <div class=content>
+                <br>
+                <table id="visit_table" class="dt[-head|-body]-left">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Weight</th>
+                      <th>Height</th>
+                      <th>Doctor</th>
+                      <th>Symptoms</th>
+                      <th>Diagnostics</th>
+                      <th>Comorbidities</th>
+                      <th>Treatment</th>
+                      <th>Clinical Progress</th>
+                      <th>Support Services</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for visit in visits %}
+                        <tr>
+                          <td>{{visit.visitdate}}</td>
+                          <td>{{visit.weight}}</td>
+                          <td>{{visit.height}}</td>
+                          <td>{{visit.doctor_name}}</td>
+                          <td>{{visit.symptoms}}</td>
+                          <td>{{visit.diagnostics}}</td>
+                          <td>{{visit.comorbidities}}</td>
+                          <td>{{visit.treatment}}</td>
+                          <td>{{visit.clinical_progress}}</td>
+                          <td>{{visit.support_services}}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {%  else %}
+              <p>No Past Visits</p>
+              {% endif %}
+              <h2>Medication</h2>
+              <p>To change the frequency of a medication, please end the current prescription and add a new prescription.</p>
+              <button id="new_med" onclick="new_med()">New Prescription</button>
+              &emsp;
+              {% if current_med %}<button id="end_med" onclick="end_med()">End Prescription</button>{% endif %}
+              <br><br>
+              <div id="new_med_info">
+                <form class="form-horizontal" method="POST" action="{{ url_for('main.patientinfo',patient_id=patient.id)}}">
+                  <fieldset>
+                    <p>Medication Name:
+                    <input type="text" name="new_med_name" id="new_med_name">
+                    &emsp;&emsp;Dose:  
+                    <input type="number" step="0.1" name="dose" id="dose">
+                    &emsp;&emsp;Frequency: 
+                    <input type="number" step="0.1" name="freq" id="freq">
+                    &emsp;&emsp;Start Date: 
+                    <input type="date" name="start_date" id="start_date">
+                    &emsp;<button type="submit">Add</button></p>
+                  </fieldset>
+                </form>
+              </div>
+              {% if current_med %}
+              <div id="end_med_info">
+                <form class="form-horizontal" method="POST" action="{{ url_for('main.patientinfo',patient_id=patient.id)}}">
+                  <fieldset>
+                    <p>Medication Name:
+                      <select id="end_med" name="end_med">
+                      {%for med in current_med%}
+                      <option value="{{med.med_name}}">{{med.med_name}}</option>
+                      {%endfor%}
+                    </select>
+                    &emsp;&emsp;End Date:
+                    <input type="date" name="end_date" id="end_date">
+                    &emsp;<button type="submit">End</button></p>
+                  </fieldset>
+                </form>
+              </div>
+              <h4>Current Medication</h4>
+                <table id="curr_med_table" class="display">
+                  <thead>
+                    <tr>
+                      <th>Medication</th>
+                      <th>Dose</th>
+                      <th>Frequency</th>
+                      <th>Start Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for med in current_med %}
+                        <tr>
+                          <td>{{med.med_name}}</td>
+                          <td>{{med.dose}}</td>
+                          <td>{{med.frequency}}</td>
+                          <td>{{med.startdate}}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <br>
+                <button type="button" class="collapsible">All Medication</button>
+              <div class=content>
+                <br>
+                <table id="med_table" class="display">
+                  <thead>
+                    <tr>
+                      <th>Medication</th>
+                      <th>Dose</th>
+                      <th>Frequency</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for med in all_med %}
+                        <tr>
+                          <td>{{med.med_name}}</td>
+                          <td>{{med.dose}}</td>
+                          <td>{{med.frequency}}</td>
+                          <td>{{med.startdate}}</td>
+                          <td>{{med.enddate}}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div><br>
+              {% else %}
+              <p>No Current Medications</p>
+              {%endif%}
+            </div>
+          </div>
+
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
+  document.getElementById("info_edit").style.display = "none";
+  document.getElementById("new_med_info").style.display = "none";
+  document.getElementById("end_med_info").style.display = "none";
+
+
+function update_info() {
+  var show = document.getElementById("info_show");
+  if (show.style.display === "none") {
+    show.style.display = "block";
+  } else {
+    show.style.display = "none";
+  }
+  var edit = document.getElementById("info_edit");
+  if (edit.style.display === "none") {
+    edit.style.display = "block";
+  } else {
+    edit.style.display = "none";
+  }
+  var update = document.getElementById("update_info");
+  if (update.innerHTML === "Update") {
+    update.innerHTML = "Close";
+  } else {
+    update.innerHTML = "Update";
+  }
+}
+
+function new_med() {
+  var show = document.getElementById("new_med_info");
+  if (show.style.display === "none") {
+    show.style.display = "block";
+  } else {
+    show.style.display = "none";
+  }
+  var update = document.getElementById("new_med");
+  if (update.innerHTML === "New Prescription") {
+    update.innerHTML = "Close";
+  } else {
+    update.innerHTML = "New Prescription";
+  }
+}
+
+function end_med(){
+  var modal = document.getElementById("end_med_info");
+  if (modal.style.display === "none") {
+    modal.style.display = "block";
+  } else {
+    modal.style.display = "none";
+  }
+  var update = document.getElementById("end_med");
+  if (update.innerHTML === "End Prescription") {
+    update.innerHTML = "Close";
+  } else {
+    update.innerHTML = "End Prescription";
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Patient Registration{% endblock %}
+
+{% block content %}
+      <div class="page-header">
+        <h1>Patient Registration</h1><br><p>Welcome to the MBarara Epilepsy Center! Please fill out the following form to register.</p>
+      </div>
+        <div class="row">
+          <div class="col-lg-12">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div>{{ messages[0]}}<br><br></div>
+              {% endif %}
+            {% endwith %}
+            <div class="well bs-component">
+              <form class="form-horizontal" method="POST" action="{{ url_for('main.registerpatient') }}">
+                <fieldset>
+                  <div class="form-group">
+                    <label for="inputName" class="col-lg-2 control-label">First Name</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name="name_first" id="name_first" placeholder="First Name">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputName" class="col-lg-2 control-label">Last Name</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name="name_last" id="name_last" placeholder="Last Name">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputName" class="col-lg-2 control-label">Date of Birth</label>
+                    <div class="col-lg-10">
+                      <input type="date" class="form-control" name="dob" id="dob">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputName" class="col-lg-2 control-label">Email</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name="email" id="email" placeholder="Email">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Address</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name="address" id="address"
+                              placeholder="Street Address, State, City, Zip">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputPassword" class="col-lg-2 control-label">Phone Number</label>
+                    <div class="col-lg-10">
+                      <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone Number">
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}
